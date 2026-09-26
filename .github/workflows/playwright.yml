@@ -53,3 +53,7 @@ jobs:
             name: playwright-report
             path: playwright-report/
             retention-days: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
