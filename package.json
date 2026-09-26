@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "dotenv": "^18.0.1",
+    "playwright": "^1.63.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2"
+  },
+  "scripts": {
+    "test:chrome_browser": "npx playwright test --project=chromium",
+    "test:webkit_browser": "npx playwright test --project=webkit",
+    "test:firefox_broswer": "npx playwright test --project=firefox",
+    "test:all_browsers": "npx playweright test --headed" 
+  }
+}
