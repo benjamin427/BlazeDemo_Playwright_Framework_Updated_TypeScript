@@ -33,9 +33,9 @@ jobs:
           retention-days: 30
 
   merge-reports:
+    runs-on: ubuntu-latest
     if: ${{ !cancelled() }}
     needs: [test]
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
