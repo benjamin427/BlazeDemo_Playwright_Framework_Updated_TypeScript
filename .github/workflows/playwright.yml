@@ -64,7 +64,7 @@ jobs:
       # 1. Implement run command to concatentate the folders
         run: |
           echo "=== Combining Reports ==="
-          cat merged-reports/*.txt > final-combined-report.txt
+          cat merge-reports/*.txt > final-combined-report.txt
           cat final-combined-report.txt
       # Upload the reports
       # 1. Implement the upload tool artifact
