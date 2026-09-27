@@ -5,37 +5,72 @@ on:
   pull_request:
     branches: [ main, master ]
 jobs:
-  test:
+  # 1. Run the test
+  run-tests:
+    runs-on: ubuntu-latest
+    # 2. Implement strategy
     strategy:
-      fail-fast: false
+      # 3. Implement matrix
       matrix:
-        shardIndex: [1, 2, 3, 4]
-        shardTotal: [4]
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
+        # 4. Sharing
+        shard: [1, 2, 3]
+    # Implement steps and run commands
+    # 1. Implement steps
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: npx playwright test --shard=${{matrix.shardIndex}}/${{matrix.shardTotal}}
-      - name: Upload blob report to GitHub Actions artifacts
-        if: ${{!cancelled()}}
-        uses: actions/upload-artifact@v4
-        with:
-          name: all-blob-reports-${{matrix.shardIndex}}
-          path: blob-report/
-          retention-days: 30
-
-  merge-reports:
-    runs-on: ubuntu-latest
-    steps:
+      # 2. Implement checkout code
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Merge reports
-        run: npm run merge-coverage-report
+    # Run commands
+    # 1. Execute the run commmand
+      - name: Run tests
+      # 2. Make directory for output reports with matrix sharing 
+        run: |
+          mkdir -p output-reports
+          echo "Results from Shard ${{matrix.shard}}" > output-reports/report-${{matrix.shard}}.txt
+    # Upload shard report by using upload artifact tool
+    # 1. Implement the upload artifact tool  
+      - name: Upload Shard Report
+        uses: actions/upload-artifact@v4
+        # 2. Use the test report shard matrix and output reports folder
+        with:
+          name: test-reports-shard-${{matrix.shard}}
+          path: output-reports/
+          # 3. Set the retention days
+          retention-days: 1
+  
+  # Merge the reports
+  merge-reports:
+    runs-on: ubuntu-latest
+    # 1. Implement needs command to run-tests
+    needs: run-tests
+    # 2. Implement steps 
+    steps:
+      # 3. Implement checkout code tool
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # 4. Implement download artifact tool 
+      - name: Download All Shard reports
+        uses: actions/download-artifact@v4
+        # Use report command patterns for testing reports
+        with:
+          # 1. Set the pattern for test-reports-shard command
+          pattern: test-reports-shard
+          # 2. Set the path for the merge-reports command
+          path: merge-reports
+          # 3. Set merge-multiple to true
+          merge-multiple: true
+      # Merge the reports
+      - name: Merge Report Processing
+      # 1. Implement run command to concatentate the folders
+        run: |
+          echo "=== Combining Reports ==="
+          cat merged-reports/*.txt > final-combined-report.txt
+          cat final-combined-report.txt
+      # Upload the reports
+      # 1. Implement the upload tool artifact
+      - name: Upload Final Unified Report
+        uses: actions/upload-artifact@v4
+        # 2. Use with the final combined report that was concatenated
+        with:
+          name: final-combined-report
+          path: final-combined-report.txt
