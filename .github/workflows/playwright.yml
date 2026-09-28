@@ -54,9 +54,9 @@ jobs:
         # Use report command patterns for testing reports
         with:
           # 1. Set the pattern for test-reports-shard command
-          pattern: test-reports-shard
+          pattern: test-reports-shard-*
           # 2. Set the path for the merge-reports command
-          path: merge-reports
+          path: merge-reports/
           # 3. Set merge-multiple to true
           merge-multiple: true
       # Merge the reports
