@@ -62,9 +62,9 @@ jobs:
       # Merge the reports
       - name: Merge Report Processing
       # 1. Implement run command to concatentate the folders
-        working-directory: ./merge-reports
         run: |
           echo "=== Combining Reports ==="
+          ls -R
           cat merge-reports/*.txt > final-combined-report.txt
           cat final-combined-report.txt
       # Upload the reports
